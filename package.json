@@ -1,0 +1,15 @@
+{
+  "name": "elit-stack",
+  "version": "0.1.0",
+  "description": "Setup stack for elit service",
+  "main": "index.js",
+  "scripts": {},
+  "repository": "git+https://github.com/elitcloud/elit-stack.git",
+  "author": "Gary Lai",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/elitcloud/elit-stack/issues"
+  },
+  "homepage": "https://github.com/elitcloud/elit-stack#readme",
+  "private": true
+}
