@@ -15,16 +15,16 @@ provider "aws" {
 
 # Setup 
 
-module "security_groups" {
-  source      = "./terraform/security_groups"
-  name        = "${var.name}"
-  environment = "${var.environment}"
-  vpc_id      = "${module.vpc.id}"
-}
-
 module "vpc" {
   source      = "./terraform/vpc"
   name        = "${var.name}"
   environment = "${var.environment}"
   region      = "${var.region}"
+}
+
+module "security_groups" {
+  source      = "./terraform/security_groups"
+  name        = "${var.name}"
+  environment = "${var.environment}"
+  vpc_id      = "${module.vpc.id}"
 }
