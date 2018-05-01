@@ -1,17 +1,27 @@
-// External ELB allows traffic from the world.
-# output "external_elb" {
-#   value = "${aws_security_group.external_elb.id}"
-# }
-// External SSH allows ssh connections on port 22 from the world.
-# output "external_ssh" {
-#   value = "${aws_security_group.external_ssh.id}"
-# }
-# // Internal ELB allows internal traffic.
-# output "internal_elb" {
-#   value = "${aws_security_group.internal_elb.id}"
-# }
-# // Internal SSH allows ssh connections from the external ssh security group.
-# output "internal_ssh" {
-#   value = "${aws_security_group.internal_ssh.id}"
-# }
+output "web" {
+  value = "${aws_security_group.web.id}"
+}
 
+output "bastion" {
+  value = "${aws_security_group.bastion.id}"
+}
+
+output "internal" {
+  value = "${aws_security_group.internal.id}"
+}
+
+output "internal_ssh" {
+  value = "${aws_security_group.internal_ssh.id}"
+}
+
+output "psql" {
+  value = "${aws_security_group.psql.id}"
+}
+
+output "redis" {
+  value = "${aws_security_group.redis.id}"
+}
+
+output "efs" {
+  value = "${aws_security_group.efs.id}"
+}
