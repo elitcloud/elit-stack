@@ -45,11 +45,21 @@ resource "aws_nat_gateway" "main" {
   allocation_id = "${element(aws_eip.nat.*.id, count.index)}"
   subnet_id     = "${element(aws_subnet.public_subnets.*.id, count.index)}"
   depends_on    = ["aws_internet_gateway.main"]
+
+  tags {
+    Name        = "${var.name}"
+    Environment = "${var.environment}"
+  }
 }
 
 resource "aws_eip" "nat" {
   count = "${length(var.private_subnets)}"
   vpc   = true
+
+  tags {
+    Name        = "${var.name}"
+    Environment = "${var.environment}"
+  }
 }
 
 # Subnets
@@ -64,7 +74,7 @@ resource "aws_subnet" "public_subnets" {
   map_public_ip_on_launch = true
 
   tags {
-    Name        = "${var.name}-${format("public-%03d", count.index+1)}"
+    Name        = "${var.name}-${format("public-%d", count.index+1)}"
     Environment = "${var.environment}"
   }
 }
@@ -76,7 +86,7 @@ resource "aws_subnet" "private_subnets" {
   availability_zone = "${element(var.availability_zone, count.index)}"
 
   tags {
-    Name        = "${var.name}-${format("private-%03d", count.index+1)}"
+    Name        = "${var.name}-${format("private-%d", count.index+1)}"
     Environment = "${var.environment}"
   }
 }
@@ -112,7 +122,7 @@ resource "aws_route_table" "nat_gateway" {
   vpc_id = "${aws_vpc.main.id}"
 
   tags {
-    Name        = "${var.name}-${format("nat-gateway-%03d", count.index+1)}"
+    Name        = "${var.name}-${format("nat-gateway-%d", count.index+1)}"
     Environment = "${var.environment}"
   }
 }

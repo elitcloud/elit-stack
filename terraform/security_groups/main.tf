@@ -133,7 +133,7 @@ resource "aws_security_group" "internal_ssh" {
   }
 
   tags {
-    Name        = "${format("%-sinternal_ssh", var.name)}"
+    Name        = "${format("%s-sinternal-ssh", var.name)}"
     Environment = "${var.environment}"
   }
 }
@@ -162,7 +162,7 @@ resource "aws_security_group" "psql" {
   }
 
   tags {
-    Name        = "${format("%-psql", var.name)}"
+    Name        = "${format("%s-psql", var.name)}"
     Environment = "${var.environment}"
   }
 }
@@ -191,7 +191,7 @@ resource "aws_security_group" "redis" {
   }
 
   tags {
-    Name        = "${format("%-redis", var.name)}"
+    Name        = "${format("%s-redis", var.name)}"
     Environment = "${var.environment}"
   }
 }
@@ -220,7 +220,7 @@ resource "aws_security_group" "efs" {
   }
 
   tags {
-    Name        = "${format("%-efs", var.name)}"
+    Name        = "${format("%s-efs", var.name)}"
     Environment = "${var.environment}"
   }
 }

@@ -17,6 +17,5 @@ variable private_subnets {
 }
 
 variable availability_zone {
-  type    = "list"
-  default = ["us-west-2a", "us-west-2b", "us-west-2c"]
+  type = "list"
 }

@@ -17,10 +17,11 @@ provider "aws" {
 # Setup 
 
 module "vpc" {
-  source      = "./terraform/vpc"
-  name        = "${var.name}"
-  environment = "${var.environment}"
-  region      = "${var.region}"
+  source            = "./terraform/vpc"
+  name              = "${var.name}"
+  environment       = "${var.environment}"
+  region            = "${var.region}"
+  availability_zone = ["us-west-2a", "us-west-2b", "us-west-2c"]
 }
 
 module "security_groups" {
