@@ -9,6 +9,7 @@
 provider "aws" {
   profile = "${var.profile}"
   region  = "${var.region}"
+  version = "~> 1.16"
 }
 
 # The order of modules is not important, but it would be better that modules are ordered like you setup them on the AWS. 
