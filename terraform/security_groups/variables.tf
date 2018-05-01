@@ -4,7 +4,10 @@ variable environment {}
 
 variable vpc_id {}
 
-variable ssh_cidr {
-  description = "Specific cidr for external cidr. Default for world."
-  default     = "0.0.0.0/0"
+variable vpc_cidr {
+  default = "10.0.0.0/16"
+}
+
+variable bastion_cidr {
+  default = "0.0.0.0/0"
 }
