@@ -30,3 +30,15 @@ module "security_groups" {
   environment = "${var.environment}"
   vpc_id      = "${module.vpc.id}"
 }
+
+module "bastion" {
+  source          = "./terraform/bastion"
+  name            = "${var.name}"
+  environment     = "${var.environment}"
+  region          = "${var.region}"
+  instance_type   = "${var.bastion_instance_type}"
+  security_groups = "${module.security_groups.bastion}"
+  vpc_id          = "${module.vpc.id}"
+  subnet_id       = "${element(module.vpc.public_subnets, 0)}"
+  key_name        = "${var.key_name}"
+}
