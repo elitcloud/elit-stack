@@ -16,11 +16,18 @@ provider "aws" {
 
 # Setup 
 
+module "defaults" {
+  source = "./terraform/defaults"
+  region = "${var.region}"
+  cidr   = "${var.cidr}"
+}
+
 module "vpc" {
   source            = "./terraform/vpc"
   name              = "${var.name}"
   environment       = "${var.environment}"
   region            = "${var.region}"
+  cidr              = "${var.cidr}"
   availability_zone = ["us-west-2a", "us-west-2b", "us-west-2c"]
 }
 
@@ -41,4 +48,17 @@ module "bastion" {
   vpc_id          = "${module.vpc.id}"
   subnet_id       = "${element(module.vpc.public_subnets, 0)}"
   key_name        = "${var.key_name}"
+}
+
+module "dhcp" {
+  source  = "./terraform/dhcp"
+  name    = "${module.dns.name}"
+  vpc_id  = "${module.vpc.id}"
+  servers = "${coalesce(var.domain_name_servers, module.defaults.domain_name_servers)}"
+}
+
+module "dns" {
+  source = "./terraform/dns"
+  name   = "${var.domain_name}"
+  vpc_id = "${module.vpc.id}"
 }
