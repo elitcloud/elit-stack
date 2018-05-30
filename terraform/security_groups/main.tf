@@ -3,6 +3,7 @@
   
   External security groups allow all trafics connect to services on port 22, 80 and 443. 
   Internal security groups are designed for services inside of it. 
+  - Default
   - External:
     - web
     - bastion
@@ -13,6 +14,32 @@
     - redis
     - efs
  */
+
+# Default
+
+resource "aws_security_group" "default" {
+  name        = "${format("%s-%s-default", var.name, var.environment)}"
+  description = "Default security group to allow inbound/outbound from the VPC"
+  vpc_id      = "${var.vpc_id}"
+
+  ingress {
+    from_port = "0"
+    to_port   = "0"
+    protocol  = "-1"
+    self      = true
+  }
+
+  egress {
+    from_port = "0"
+    to_port   = "0"
+    protocol  = "-1"
+    self      = "true"
+  }
+
+  tags {
+    Environment = "${var.environment}"
+  }
+}
 
 # External
 resource "aws_security_group" "web" {
