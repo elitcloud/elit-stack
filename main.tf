@@ -5,6 +5,10 @@
 #   }
 # }
 
+locals {
+  production_availability_zones = ["us-west-2a", "us-west-2b", "us-west-2c"]
+}
+
 # This is the entry. It tells Terrraform to use AWS as provider
 provider "aws" {
   profile = "${var.profile}"
@@ -28,7 +32,7 @@ module "vpc" {
   environment       = "${var.environment}"
   region            = "${var.region}"
   cidr              = "${var.cidr}"
-  availability_zone = ["us-west-2a", "us-west-2b", "us-west-2c"]
+  availability_zone = "${local.production_availability_zones}"
 }
 
 module "security_groups" {

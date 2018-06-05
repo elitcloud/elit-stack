@@ -1,3 +1,7 @@
+output "default" {
+  value = "${aws_security_group.default.id}"
+}
+
 output "web" {
   value = "${aws_security_group.web.id}"
 }
