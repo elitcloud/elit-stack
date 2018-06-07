@@ -8,7 +8,6 @@ output "bastion_ip" {
   value = "${module.bastion.external_ip}"
 }
 
-// The internal route53 zone ID.
-output "zone_id" {
-  value = "${module.dns.zone_id}"
+output "lb_dns_name" {
+  value = "${module.ecp.lb_dns_name}"
 }

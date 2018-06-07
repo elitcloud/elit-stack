@@ -26,6 +26,8 @@ variable "key_name" {
   description = "the name of the ssh key to use, e.g. \"internal-key\""
 }
 
+variable "github_token" {}
+
 variable "bastion_instance_type" {
   description = "Instance type for the bastion"
   default     = "t2.micro"
