@@ -21,6 +21,8 @@ data "template_file" "task" {
   template = "${file("${path.module}/tasks/${var.name}.json")}"
 
   vars {
+    name      = "${var.name}"
+    region    = "${var.region}"
     image     = "${aws_ecr_repository.main.repository_url}"
     log_group = "${var.log_group}"
   }
@@ -112,7 +114,7 @@ resource "aws_ecs_service" "main" {
 
   load_balancer {
     target_group_arn = "${aws_lb_target_group.main.arn}"
-    container_name   = "web"
+    container_name   = "${var.name}"
     container_port   = "80"
   }
 
@@ -227,90 +229,107 @@ resource "aws_cloudwatch_metric_alarm" "cpu_high" {
     ServiceName = "${aws_ecs_service.main.name}"
   }
 
-  alarm_description = "Scale up if the memory reservation is above 90% for 10 minutes"
+  alarm_description = "Scale up if the cpu reservation is above 90% for 10 minutes"
   alarm_actions     = ["${aws_appautoscaling_policy.scale_up.arn}"]
+  alarm_description = "Scale up if the memory reservation is below 90% for 10 minutes"
+  ok_actions        = ["${aws_appautoscaling_policy.down.arn}"]
 
   lifecycle {
     create_before_destroy = true
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "memory_high" {
-  alarm_name          = "${var.name}-memoryreservation-high"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "2"
-  metric_name         = "MemoryReservation"
-  namespace           = "AWS/ECS"
-  period              = "300"
-  statistic           = "Maximum"
-  threshold           = "85"
+# resource "aws_cloudwatch_metric_alarm" "memory_high" {
+#   alarm_name          = "${var.name}-memoryreservation-high"
+#   comparison_operator = "GreaterThanOrEqualToThreshold"
+#   evaluation_periods  = "2"
+#   metric_name         = "MemoryReservation"
+#   namespace           = "AWS/ECS"
+#   period              = "300"
+#   statistic           = "Maximum"
+#   threshold           = "85"
 
-  dimensions {
-    ClusterName = "${aws_ecs_cluster.main.name}"
-    ServiceName = "${aws_ecs_service.main.name}"
-  }
 
-  alarm_description = "Scale up if the memory reservation is above 90% for 10 minutes"
-  alarm_actions     = ["${aws_appautoscaling_policy.scale_up.arn}"]
+#   dimensions {
+#     ClusterName = "${aws_ecs_cluster.main.name}"
+#     ServiceName = "${aws_ecs_service.main.name}"
+#   }
 
-  lifecycle {
-    create_before_destroy = true
-  }
 
-  # This is required to make cloudwatch alarms creation sequential, AWS doesn't
-  # support modifying alarms concurrently.
-  depends_on = ["aws_cloudwatch_metric_alarm.cpu_high"]
-}
+#   alarm_description = "Scale up if the memory reservation is above 90% for 10 minutes"
+#   alarm_actions     = ["${aws_appautoscaling_policy.scale_up.arn}"]
 
-resource "aws_cloudwatch_metric_alarm" "cpu_low" {
-  alarm_name          = "${var.name}-cpureservation-low"
-  comparison_operator = "LessThanOrEqualToThreshold"
-  evaluation_periods  = "2"
-  metric_name         = "CPUReservation"
-  namespace           = "AWS/ECS"
-  period              = "300"
-  statistic           = "Maximum"
-  threshold           = "10"
 
-  dimensions {
-    ClusterName = "${aws_ecs_cluster.main.name}"
-    ServiceName = "${aws_ecs_service.main.name}"
-  }
+#   lifecycle {
+#     create_before_destroy = true
+#   }
 
-  alarm_description = "Scale down if the cpu reservation is below 10% for 10 minutes"
-  alarm_actions     = ["${aws_appautoscaling_policy.scale_down.arn}"]
 
-  lifecycle {
-    create_before_destroy = true
-  }
+#   # This is required to make cloudwatch alarms creation sequential, AWS doesn't
+#   # support modifying alarms concurrently.
+#   depends_on = ["aws_cloudwatch_metric_alarm.cpu_high"]
+# }
 
-  # This is required to make cloudwatch alarms creation sequential, AWS doesn't
-  # support modifying alarms concurrently.
-  depends_on = ["aws_cloudwatch_metric_alarm.memory_high"]
-}
 
-resource "aws_cloudwatch_metric_alarm" "memory_low" {
-  alarm_name          = "${var.name}-memoryreservation-low"
-  comparison_operator = "LessThanOrEqualToThreshold"
-  evaluation_periods  = "2"
-  metric_name         = "MemoryReservation"
-  namespace           = "AWS/ECS"
-  period              = "300"
-  statistic           = "Maximum"
-  threshold           = "10"
+# resource "aws_cloudwatch_metric_alarm" "cpu_low" {
+#   alarm_name          = "${var.name}-cpureservation-low"
+#   comparison_operator = "LessThanOrEqualToThreshold"
+#   evaluation_periods  = "2"
+#   metric_name         = "CPUReservation"
+#   namespace           = "AWS/ECS"
+#   period              = "300"
+#   statistic           = "Maximum"
+#   threshold           = "10"
 
-  dimensions {
-    ClusterName = "${aws_ecs_cluster.main.name}"
-  }
 
-  alarm_description = "Scale down if the memory reservation is below 10% for 10 minutes"
-  alarm_actions     = ["${aws_appautoscaling_policy.scale_down.arn}"]
+#   dimensions {
+#     ClusterName = "${aws_ecs_cluster.main.name}"
+#     ServiceName = "${aws_ecs_service.main.name}"
+#   }
 
-  lifecycle {
-    create_before_destroy = true
-  }
 
-  # This is required to make cloudwatch alarms creation sequential, AWS doesn't
-  # support modifying alarms concurrently.
-  depends_on = ["aws_cloudwatch_metric_alarm.cpu_low"]
-}
+#   alarm_description = "Scale down if the cpu reservation is below 10% for 10 minutes"
+#   alarm_actions     = ["${aws_appautoscaling_policy.scale_down.arn}"]
+
+
+#   lifecycle {
+#     create_before_destroy = true
+#   }
+
+
+#   # This is required to make cloudwatch alarms creation sequential, AWS doesn't
+#   # support modifying alarms concurrently.
+#   depends_on = ["aws_cloudwatch_metric_alarm.memory_high"]
+# }
+
+
+# resource "aws_cloudwatch_metric_alarm" "memory_low" {
+#   alarm_name          = "${var.name}-memoryreservation-low"
+#   comparison_operator = "LessThanOrEqualToThreshold"
+#   evaluation_periods  = "2"
+#   metric_name         = "MemoryReservation"
+#   namespace           = "AWS/ECS"
+#   period              = "300"
+#   statistic           = "Maximum"
+#   threshold           = "10"
+
+
+#   dimensions {
+#     ClusterName = "${aws_ecs_cluster.main.name}"
+#   }
+
+
+#   alarm_description = "Scale down if the memory reservation is below 10% for 10 minutes"
+#   alarm_actions     = ["${aws_appautoscaling_policy.scale_down.arn}"]
+
+
+#   lifecycle {
+#     create_before_destroy = true
+#   }
+
+
+#   # This is required to make cloudwatch alarms creation sequential, AWS doesn't
+#   # support modifying alarms concurrently.
+#   depends_on = ["aws_cloudwatch_metric_alarm.cpu_low"]
+# }
+
