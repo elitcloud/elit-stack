@@ -4,12 +4,12 @@ variable region {}
 
 variable "memory" {
   description = "The number of MiB of memory to reserve for the container"
-  default     = 512
+  default     = 2048
 }
 
 variable "cpu" {
   description = "The number of cpu units to reserve for the container"
-  default     = 512
+  default     = 1024
 }
 
 variable "log_group" {
