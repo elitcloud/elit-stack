@@ -29,3 +29,7 @@ output "redis" {
 output "efs" {
   value = "${aws_security_group.efs.id}"
 }
+
+output "cluster" {
+  value = "${aws_security_group.cluster.id}"
+}

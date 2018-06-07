@@ -251,3 +251,32 @@ resource "aws_security_group" "efs" {
     Environment = "${var.environment}"
   }
 }
+
+resource "aws_security_group" "cluster" {
+  name        = "${format("%s-%s-cluster", var.name, var.environment)}"
+  description = "Allows traffic from and to the EC2 instances of the ${var.name} ECS cluster"
+  vpc_id      = "${var.vpc_id}"
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 8
+    to_port     = 0
+    protocol    = "icmp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  tags {
+    Name        = "${format("%s-cluster", var.name)}"
+    Environment = "${var.environment}"
+  }
+}
