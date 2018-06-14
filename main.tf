@@ -66,17 +66,17 @@ module "security_groups" {
   vpc_id      = "${module.vpc.vpc_id}"
 }
 
-module "bastion" {
-  source          = "./terraform/bastion"
-  name            = "${var.name}"
-  environment     = "${var.environment}"
-  region          = "${var.region}"
-  instance_type   = "${var.bastion_instance_type}"
-  security_groups = "${module.security_groups.bastion}"
-  vpc_id          = "${module.vpc.vpc_id}"
-  subnet_id       = "${element(module.vpc.public_subnets, 0)}"
-  key_name        = "${var.key_name}"
-}
+# module "bastion" {
+#   source          = "./terraform/bastion"
+#   name            = "${var.name}"
+#   environment     = "${var.environment}"
+#   region          = "${var.region}"
+#   instance_type   = "${var.bastion_instance_type}"
+#   security_groups = "${module.security_groups.bastion}"
+#   vpc_id          = "${module.vpc.vpc_id}"
+#   subnet_id       = "${element(module.vpc.public_subnets, 0)}"
+#   key_name        = "${var.key_name}"
+# }
 
 # module "dhcp" {
 #   source  = "./terraform/dhcp"
@@ -130,9 +130,9 @@ module "ecp-codepipeline" {
   name               = "ecp"
   environment        = "${var.environment}"
   region             = "${var.region}"
-  github_owner       = "elitcloud"
-  github_repo        = "elit-compute-python"
-  github_branch      = "master"
+  github_owner       = "${var.github_owner}"
+  github_repo        = "${var.github_repo}"
+  github_branch      = "${var.github_branch}"
   github_token       = "${var.github_token}"
   repository_url     = "${module.ecp.repository_url}"
   ecs_service_name   = "${module.ecp.service_name}"

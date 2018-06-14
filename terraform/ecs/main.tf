@@ -231,8 +231,9 @@ resource "aws_cloudwatch_metric_alarm" "cpu_high" {
 
   alarm_description = "Scale up if the cpu reservation is above 90% for 10 minutes"
   alarm_actions     = ["${aws_appautoscaling_policy.scale_up.arn}"]
-  alarm_description = "Scale up if the memory reservation is below 90% for 10 minutes"
-  ok_actions        = ["${aws_appautoscaling_policy.down.arn}"]
+
+  # ok_description    = "Scale down if the memory reservation is below 90% for 10 minutes"
+  ok_actions = ["${aws_appautoscaling_policy.scale_down.arn}"]
 
   lifecycle {
     create_before_destroy = true

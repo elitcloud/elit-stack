@@ -16,12 +16,12 @@
     }
   },
   "environment": [{
-      "name": "FLASK_APP",
-      "value": "manage.py"
+      "name": "PYTHONUNBUFFERED",
+      "value": "1"
     },
     {
-      "name": "FLASK_CONFIG",
-      "value": "production"
+      "name": "DJANGO_SETTINGS_MODULE",
+      "value": "ecp.settings.prod"
     }
   ]
 }]

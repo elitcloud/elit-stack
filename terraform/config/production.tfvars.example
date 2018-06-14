@@ -1,2 +1,9 @@
-environment=production
-key_name=
+environment = "production"
+
+key_name = "elit-us-west-2"
+
+github_token = ""
+
+github_owner       = "elitcloud"
+github_repo        = "ecp"
+github_branch      = "master"

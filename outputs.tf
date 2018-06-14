@@ -4,9 +4,9 @@ output "region" {
 }
 
 // The bastion host IP.
-output "bastion_ip" {
-  value = "${module.bastion.external_ip}"
-}
+# output "bastion_ip" {
+#   value = "${module.bastion.external_ip}"
+# }
 
 output "lb_dns_name" {
   value = "${module.ecp.lb_dns_name}"
