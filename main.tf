@@ -67,3 +67,9 @@ module "docker_swarm_security_group" {
   name   = "docker_swarm_security_group"
   vpc_id = "${module.vpc.vpc_id}"
 }
+
+module "cloudwatch" {
+  source      = "modules/cloudwatch"
+  name        = "${var.name}"
+  environment = "${var.environment}"
+}
