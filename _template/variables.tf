@@ -1,7 +1,3 @@
-variable profile {
-  default = "terraform"
-}
-
 variable name {
   default     = "elit"
   description = "the name of your stack, e.g. \"elit\""
@@ -13,6 +9,5 @@ variable environment {
 }
 
 variable region {
-  default     = "us-west-2"
-  description = "the region of your stack, e.g. \"us-west-2\""
+  default = "us-west-2"
 }
