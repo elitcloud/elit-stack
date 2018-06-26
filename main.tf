@@ -12,7 +12,7 @@ module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
   name = "${var.name}"
-  cidr = "10.0.0.0/16"
+  cidr = "${var.vpc_cidr}"
 
   azs             = "${local.availability_zones}"
   private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
@@ -33,39 +33,38 @@ data "aws_security_group" "default" {
 }
 
 module "web_security_group" {
-  source = "terraform-aws-modules/security-group/aws//modules/web"
-  name   = "web_security_group"
-  vpc_id = "${module.vpc.vpc_id}"
+  source              = "terraform-aws-modules/security-group/aws//modules/web"
+  name                = "web_security_group"
+  vpc_id              = "${module.vpc.vpc_id}"
+  ingress_cidr_blocks = ["0.0.0.0/0"]
 }
 
 module "nfs_security_group" {
-  source = "terraform-aws-modules/security-group/aws//modules/nfs"
-  name   = "nfs_security_group"
-  vpc_id = "${module.vpc.vpc_id}"
+  source              = "terraform-aws-modules/security-group/aws//modules/nfs"
+  name                = "nfs_security_group"
+  vpc_id              = "${module.vpc.vpc_id}"
+  ingress_cidr_blocks = ["${var.vpc_cidr}"]
 }
 
 module "redis_security_group" {
-  source = "terraform-aws-modules/security-group/aws//modules/redis"
-  name   = "redis_security_group"
-  vpc_id = "${module.vpc.vpc_id}"
+  source              = "terraform-aws-modules/security-group/aws//modules/redis"
+  name                = "redis_security_group"
+  vpc_id              = "${module.vpc.vpc_id}"
+  ingress_cidr_blocks = ["${var.vpc_cidr}"]
 }
 
 module "postgresql_security_group" {
-  source = "terraform-aws-modules/security-group/aws//modules/postgresql"
-  name   = "postgresql_security_group"
-  vpc_id = "${module.vpc.vpc_id}"
+  source              = "terraform-aws-modules/security-group/aws//modules/postgresql"
+  name                = "postgresql_security_group"
+  vpc_id              = "${module.vpc.vpc_id}"
+  ingress_cidr_blocks = ["${var.vpc_cidr}"]
 }
 
 module "ssh_security_group" {
-  source = "terraform-aws-modules/security-group/aws//modules/ssh"
-  name   = "ssh_security_group"
-  vpc_id = "${module.vpc.vpc_id}"
-}
-
-module "docker_swarm_security_group" {
-  source = "terraform-aws-modules/security-group/aws//modules/docker-swarm"
-  name   = "docker_swarm_security_group"
-  vpc_id = "${module.vpc.vpc_id}"
+  source              = "terraform-aws-modules/security-group/aws//modules/ssh"
+  name                = "ssh_security_group"
+  vpc_id              = "${module.vpc.vpc_id}"
+  ingress_cidr_blocks = ["0.0.0.0/0"]
 }
 
 module "cloudwatch" {
